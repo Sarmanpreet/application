@@ -1,0 +1,2 @@
+# application
+CREATE PROCEDURE  GetTopNew(@page Int) as declare @rowsPerPage as bigint;  declare @pageNum as bigint;  set @rowsPerPage=5;  set @pageNum=@page;    With SQLPaging As   (     Select Top(@rowsPerPage * @pageNum) ROW_NUMBER() OVER (ORDER BY ID asc)     as resultNum, *     FROM NewsModels ) select * from SQLPaging with (nolock) where resultNum > ((@pageNum - 1) * @rowsPerPage)  exec GetTopNew @page=5;
