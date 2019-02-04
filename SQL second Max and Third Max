@@ -1,0 +1,18 @@
+sql find second top and third to fourth to so.on
+second Max
+SELECT  MAX(complaint_no) AS salary
+  FROM complaint_data
+ WHERE complaint_no < (SELECT MAX(complaint_no) 
+                 FROM complaint_data
+                )
+                ;
+third Max
+SELECT  MAX(complaint_no) AS salary
+  FROM complaint_data
+ WHERE complaint_no < (SELECT MAX(complaint_no) 
+                 FROM complaint_data
+                 WHERE complaint_no < (SELECT MAX(complaint_no)
+                 FROM complaint_data)
+                ); 
+                
+             
