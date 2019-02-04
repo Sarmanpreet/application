@@ -1,0 +1,13 @@
+sql get 2nd top row skip first
+DECLARE @Skip INT = 1, @Take INT = 2
+
+SELECT * FROM 
+(
+    SELECT TOP (@Take) * FROM 
+    (
+        SELECT TOP (@Take + @Skip) * FROM complaint_data
+        ORDER BY complaint_no DESC
+    ) T1
+    ORDER BY complaint_no asc
+) T2
+ORDER BY complaint_no DESC
