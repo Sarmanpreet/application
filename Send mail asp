@@ -1,0 +1,29 @@
+  string Body = "<html><body><div style='border:3px solid #e9e9e9;' >";
+                Body += @"<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    @<h1 style='background-color:#0e9aef; width:500px; color:white;'>Invoice Of Job Books</h1>
+                                            <p>Hi" + InvoiceVm.Name + @"</p>
+                                                <p>Here I'm sending you the attachment of Your Invoice Kindly check it."
+
+                                                ;
+                Body += "</div></body></html>";
+
+                SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
+
+                smtpClient.Credentials = new System.Net.NetworkCredential("mailid", "psswd");
+                smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                smtpClient.EnableSsl = true;
+            
+                MailMessage mailMessage = new MailMessage("manughuman0@gmail.com","wpunjab4@gmail.com" );
+                mailMessage.Subject = "hello";
+                mailMessage.IsBodyHtml = true;
+                mailMessage.Body = Body;
+
+                try
+                {
+                    smtpClient.Send(mailMessage);
+                    //Label1.Text = "Message sent";
+                }
+                catch (Exception ex)
+                {
+                   // Label1.Text = ex.ToString();
+                }
