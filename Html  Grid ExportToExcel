@@ -1,0 +1,122 @@
+public void ExportToExcel()
+    {
+        GridView grdData = grdReportDesc;
+       
+        Response.Clear();
+        Response.Buffer = true;
+        Response.AddHeader("content-disposition", "attachment;filename=GridViewExport.xls");
+        Response.Charset = "";
+        Response.ContentType = "application/vnd.ms-excel";
+        using (StringWriter sw = new StringWriter())
+        {
+            HtmlTextWriter hw = new HtmlTextWriter(sw);
+            //To Export all pages
+            grdData.AllowPaging = false;
+
+            //btn_action_Click(sender, e);
+            //grdData.HeaderRow.BackColor = Color.White;
+            //foreach (TableCell cell in grdData.HeaderRow.Cells)
+            //{
+            //    cell.BackColor = grdData.HeaderStyle.BackColor;
+            //}
+           /* foreach (GridViewRow row in grdData.Rows)
+            {
+                // row.BackColor = Color.White;
+                foreach (TableCell cell in row.Cells)
+                {
+                    if (row.RowIndex % 2 == 0)
+                    {
+                       // cell.BackColor = grdData.AlternatingRowStyle.BackColor;
+                    }
+                    else
+                    {
+                     //   cell.BackColor = grdData.RowStyle.BackColor;
+                    }
+                    cell.CssClass = "textmode";
+                }
+            }*/
+
+            
+            grdData.RenderControl(hw);
+            //style to format numbers to string
+            string style = @"<style> .textmode { mso-number-format:\@; } </style>";
+            Response.Write(style);
+            Response.Output.Write(sw.ToString());
+
+           // Response.Flush();
+           // Response.End();
+
+        }
+
+        Response.Write("");
+        Response.Write("");
+            
+        grdData = grdReport;
+        string ss = Session["DpSalesPersonName"].ToString().Trim();
+        if (ddlReportOption.SelectedItem.Value == "Individual Travelling Expense Report" && ss == "ALL")
+        {
+            grdData.HeaderRow.Cells[3].Text = "Jun";
+            grdData.HeaderRow.Cells[4].Text = "Jul";
+            grdData.HeaderRow.Cells[5].Text = "Aug";
+            grdData.HeaderRow.Cells[6].Text = "Sep";
+            grdData.HeaderRow.Cells[7].Text = "Oct";
+            grdData.HeaderRow.Cells[8].Text = "Nov";
+            grdData.HeaderRow.Cells[9].Text = "Dec";
+            grdData.HeaderRow.Cells[10].Text = "Jan";
+            grdData.HeaderRow.Cells[11].Text = "Feb";
+            grdData.HeaderRow.Cells[12].Text = "Mar";
+        }
+        //Response.Clear();
+        //Response.Buffer = true;
+        //Response.AddHeader("content-disposition", "attachment;filename=GridViewExport.xls");
+       // Response.Charset = "";
+       // Response.ContentType = "application/vnd.ms-excel";
+        using (StringWriter sw = new StringWriter())
+        {
+            HtmlTextWriter hw = new HtmlTextWriter(sw);
+            //To Export all pages
+            grdData.AllowPaging = false;
+            //btn_action_Click(sender, e);
+
+         //   grdData.HeaderRow.Cells[1].Style.Add("width", "50");
+
+            //grdData.HeaderRow.BackColor = Color.White;
+            foreach (TableCell cell in grdData.HeaderRow.Cells)
+            {
+                
+                cell.BackColor = grdData.HeaderStyle.BackColor;
+            }
+            GridViewRow previousRow = grdData.Rows[2];
+
+            foreach (GridViewRow row in grdData.Rows)
+            {
+                // row.BackColor = Color.White;
+                foreach (TableCell cell in row.Cells)
+                {if(row.RowIndex==2)
+                {
+                    
+                    row.Width = 2;
+                }
+                    if (row.RowIndex % 2 == 0)
+                    {
+                        cell.BackColor = grdData.AlternatingRowStyle.BackColor;
+                    }
+                    else
+                    {
+                        cell.BackColor = grdData.RowStyle.BackColor;
+                    }
+                    cell.CssClass = "textmode";
+                }
+            }
+            grdData.RenderControl(hw);
+            //style to format numbers to string
+            string style = @"<style> .textmode { mso-number-format:\@; } </style>";
+            Response.Write(style);
+            Response.Output.Write(sw.ToString());
+            Response.Flush();
+            Response.End();
+
+        }
+
+
+    }
