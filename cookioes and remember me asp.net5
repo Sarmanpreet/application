@@ -1,0 +1,29 @@
+
+                if (chkremember.Checked == true)
+                {
+                    HttpCookie userInfo = new HttpCookie("UserInfoMarshall");
+                    userInfo["sales_person_code"] = Session["sales_person_code"].ToString();
+                    userInfo["sales_person_Name"] = Session["sales_person_Name"].ToString();
+                    userInfo["Kaizen_ID"] = Session["Kaizen_ID"].ToString();
+                    userInfo["Profile"] = Session["Profile"].ToString();
+                    userInfo["Edit_Type"] = Session["Edit_Type"].ToString();
+                    userInfo.Expires = DateTime.Now.AddDays(30);
+
+                    Response.Cookies.Add(userInfo);
+                }
+                
+ protected void Page_Load(object sender, EventArgs e)
+    {
+        HttpCookie reqCookies = Request.Cookies["UserInfoMarshall"];
+        if (reqCookies != null)
+        {
+            Session["sales_person_Name"] = reqCookies["sales_person_Name"].ToString();
+            Session["sales_person_code"] = reqCookies["sales_person_code"].ToString();
+            Session["Kaizen_ID"] = reqCookies["Kaizen_ID"].ToString();
+            Session["Profile"] = reqCookies["Profile"].ToString();  
+            Session["Edit_Type"] = reqCookies["Edit_Type"].ToString();
+                    
+       
+            Response.Redirect("customer.aspx", true);
+        }
+    }
