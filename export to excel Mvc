@@ -1,0 +1,110 @@
+  [HttpPost]
+        public JsonResult ExportToExcel(string id, string itemcode)
+        {
+
+            if (Session["UserID"] != null)
+            {
+                try
+                {
+                    var ModelInvoiceList = db.Received_Stock.Where(i => i.Finally_locked == "No").Select(x => x.Invoice_no).Distinct().ToList();
+                    var ModelItemcode = db.Received_Stock.Where(i => i.Finally_locked == "No").Select(x => x.Item_Code).Distinct().ToList();
+                    ViewBag.Itemcode = ModelItemcode;
+                    // var ModelInvoiceList = db.Disp_Wise_net_stock.Where(i => i.Balance > 0).Select(x => x.Invoice_No).Distinct().ToList();
+                    if (id != null)
+                    {
+
+                        itemcode = itemcode.Replace("~~", " ");
+                        itemcode = itemcode.Replace("$", ".");
+
+                        ViewModal viewModel = new ViewModal();
+                        //viewModel.Disp_Wise_net_stocks = db.Disp_Wise_net_stock.Where(i => i.Invoice_No == id && i.Balance != 0).ToList();
+                        List<Received_Stock> Received_Stocks = db.Received_Stock.Where(i => i.Invoice_no == id && i.Finally_locked == "No").ToList();
+                        if (id == "Filter" && itemcode != "Filter_Item_Code")
+                        {
+                            ModelInvoiceList = db.Received_Stock.Where(i => i.Item_Code == itemcode && i.Finally_locked == "No").Select(x => x.Invoice_no).Distinct().ToList();
+
+                            //ModelInvoiceList = db.Disp_Wise_net_stock.Where(i => i.Item_Code == itemcode && i.Balance > 0).Select(x => x.Invoice_No).Distinct().ToList();
+                        }
+                        else if (id != "Filter" && itemcode != "Filter_Item_Code")
+                        {
+                            // viewModel.Disp_Wise_net_stocks = db.Disp_Wise_net_stock.Where(i => i.Invoice_No == id && i.Item_Code == itemcode && i.Balance != 0).ToList();
+                            ModelInvoiceList = db.Received_Stock.Where(i => i.Finally_locked == "No").Select(x => x.Invoice_no).Distinct().ToList();
+                            Received_Stocks = db.Received_Stock.Where(i => i.Invoice_no == id && i.Finally_locked == "No").ToList();
+                        }
+                        List<Received_StockList> newlist = new List<Received_StockList>();
+                        foreach (var item in Received_Stocks)
+                        {
+                            Received_StockList newli = new Received_StockList();
+                            newli.Item_Code = item.Item_Code;
+                            newli.po_no = item.po_no;
+                            newli.Qty = item.Qty;
+                            newlist.Add(newli);
+
+                        }
+                        ;
+                        var grdData = new GridView();
+                        grdData.DataSource = newlist;
+                        grdData.DataBind();
+
+
+
+                        Response.Clear();
+                        Response.Buffer = true;
+                        Response.AddHeader("content-disposition", "attachment;filename=GridViewExport.xls");
+                        Response.Charset = "";
+                        Response.ContentType = "application/vnd.ms-excel";
+                        using (StringWriter sw = new StringWriter())
+                        {
+                            HtmlTextWriter hw = new HtmlTextWriter(sw);
+                            //To Export all pages
+                            grdData.AllowPaging = false;
+                            grdData.RenderControl(hw);
+
+                            string style = @"<style> .textmode { mso-number-format:\@; } </style>";
+                            Response.Write(style);
+                            Response.Output.Write(sw.ToString());
+                        }
+
+                        Response.Write("");
+                        Response.Write("");
+
+
+                        using (StringWriter sw = new StringWriter())
+                        {
+                            HtmlTextWriter hw = new HtmlTextWriter(sw);
+                            grdData.AllowPaging = false;
+
+                            foreach (TableCell cell in grdData.HeaderRow.Cells)
+                            {
+
+                                cell.BackColor = grdData.HeaderStyle.BackColor;
+                            }
+                            GridViewRow previousRow = grdData.Rows[2];
+                            grdData.RenderControl(hw);
+                            //style to format numbers to string
+                            string style = @"<style> .textmode { mso-number-format:\@; } </style>";
+                            Response.Write(style);
+                            // Response.Output.Write(sw.ToString());
+                            Response.Flush();
+                            Response.End();
+
+
+                            return Json("");
+                        }
+                    }
+                    else
+                    {
+                        return Json("SEESION iD NULL", JsonRequestBehavior.AllowGet);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return Json("NOT Updated", JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            else
+            {
+                return Json("Session Timeout Please Login again", JsonRequestBehavior.AllowGet);
+            }
+        }
