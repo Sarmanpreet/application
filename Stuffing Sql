@@ -1,0 +1,51 @@
+
+SELECT 
+   SS.PartCode,
+   STUFF((SELECT '; ' + US.Process 
+          FROM JobCardBaseTemplate US
+          WHERE US.SrNo = 1 and US.PartCode = SS.PartCode
+          FOR XML PATH('')), 1, 1, '') Process1,
+		  
+   STUFF((SELECT '; ' + US.Process 
+          FROM JobCardBaseTemplate US
+          WHERE US.SrNo = 2 and US.PartCode = SS.PartCode
+          FOR XML PATH('')), 1, 1, '') Process2,
+   STUFF((SELECT '; ' + US.Process 
+          FROM JobCardBaseTemplate US
+          WHERE US.SrNo = 3 and US.PartCode = SS.PartCode
+          FOR XML PATH('')), 1, 1, '') Process3,
+   STUFF((SELECT '; ' + US.Process 
+          FROM JobCardBaseTemplate US
+          WHERE US.SrNo = 4 and US.PartCode = SS.PartCode
+          FOR XML PATH('')), 1, 1, '') Process4,
+   STUFF((SELECT '; ' + US.Process 
+          FROM JobCardBaseTemplate US
+          WHERE US.SrNo = 5 and US.PartCode = SS.PartCode
+          FOR XML PATH('')), 1, 1, '') Process5,
+   STUFF((SELECT '; ' + US.Process 
+          FROM JobCardBaseTemplate US
+          WHERE US.SrNo = 6 and US.PartCode = SS.PartCode
+          FOR XML PATH('')), 1, 1, '') Process6,
+   STUFF((SELECT '; ' + US.Process 
+          FROM JobCardBaseTemplate US
+          WHERE US.SrNo = 7 and US.PartCode = SS.PartCode
+          FOR XML PATH('')), 1, 1, '') Process7,
+   STUFF((SELECT '; ' + US.Process 
+          FROM JobCardBaseTemplate US
+          WHERE US.SrNo = 8 and US.PartCode = SS.PartCode
+          FOR XML PATH('')), 1, 1, '') Process8,
+   STUFF((SELECT '; ' + US.Process 
+          FROM JobCardBaseTemplate US
+          WHERE US.SrNo = 9 and US.PartCode = SS.PartCode
+          FOR XML PATH('')), 1, 1, '') Process9,
+   STUFF((SELECT '; ' + US.Process 
+          FROM JobCardBaseTemplate US
+          WHERE US.SrNo = 10 and US.PartCode = SS.PartCode
+          FOR XML PATH('')), 1, 1, '') Process10,
+   STUFF((SELECT '; ' + US.Process 
+          FROM JobCardBaseTemplate US
+          WHERE US.SrNo = 11 and US.PartCode = SS.PartCode
+          FOR XML PATH('')), 1, 1, '') Process11
+FROM JobCardBaseTemplate SS where SS.PartCode='PC.105.14.04.S'
+GROUP BY SS.PartCode
+ORDER BY 1
