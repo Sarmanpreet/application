@@ -1,0 +1,8 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/momentjs/2.14.1/moment-with-locales.min.js"></script>
+var datenew = item.SetOn;
+                datenew = datenew.replace(")/", "");
+                datenew = datenew.replace("/Date(", "");
+              var datestr = new Date(parseInt(datenew)); 
+              var d = datestr.toString("dd-MMM-yy");
+                 var dateseton = moment(new Date(d.substr(0, 16)));
