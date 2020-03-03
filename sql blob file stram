@@ -1,0 +1,23 @@
+EXEC sp_configure filestream_access_level, 2  
+RECONFIGURE  
+USE GenDataZF;
+ALTER DATABASE GenDataZF
+    ADD FILEGROUP Image_FSGroup CONTAINS FILESTREAM;
+ 
+GO
+ALTER DATABASE GenDataZF
+    ADD FILE (NAME= GenDataZF_FS,
+    FILENAME = 'D:\icon\Image_FSGroup')
+    TO FILEGROUP Image_FSGroup
+	CREATE TABLE Images
+    (id UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL UNIQUE,
+    filestream_data VARBINARY(MAX) FILESTREAM NULL)
+
+	INSERT INTO Images([ID],filestream_data)
+
+VALUES
+
+(NEWID(),
+
+(SELECT * FROM OPENROWSET(BULK 'D:\icon\firebird.jpg',SINGLE_BLOB) AS [Image]))
+select * from Images
